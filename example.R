@@ -17,18 +17,12 @@ options(warn=-1)
 library(ggplot2); 
 theme_set(theme_minimal(base_size = 14)+theme(panel.border = element_rect(colour = "black", fill=NA, size=1))) 
 #--- Set-up
-n <- 5 # number of generations (small for demonstration)
+n <- 23 # number of generations (small for demonstration)
 ell <- 1/(n+1) # under synchronous division
-chars <- c("a","b","c","d","e","f","g","h","i","j",
-	"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-	"w", "x", "y", "z", "$", "%","@", "&","(", ")","#",
-	"!","^","?","<",">","/","{","}","[","]", "A", "B","C", "D", "E",
-    "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P",
-    "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
-j <- length(chars) # num unique edits
+j = 10 # c(10, 30, 50)
 q <- 1/j # under uniform insertion probs
-k <- c(5,7,9) # number target sites per tape
-m <- c(10,30) # number of tape copies per cell
+k <- 6  #c(5,7,9) # number target sites per tape
+m <-  50 #c(10,30) # number of tape copies per cell
 lambda <- seq(0, 20, by=0.2)
 nsim <- 100 # num simulation repeats
 
@@ -45,8 +39,13 @@ res_long <- res %>% pivot_longer(cols=c(B0, B1))
 #--- plot
 g1 <- ggplot(res_long, aes(x=lambda,y=value, col=name))+
     geom_line(linewidth=1.1)+
+  geom_vline(xintercept = 0.1 * n)+
     facet_grid(k~m, labeller=label_both)+
     labs(x="editing rate", y="probability", col="")
+
+
+
+g1
 
 ######################################################
 # Verify with simulations (small tree)
@@ -76,3 +75,4 @@ sim_res$name <- "simulated"
 
 #--plot together
 g2 <- g1 + geom_point(data=sim_res,shape=4)
+g2
